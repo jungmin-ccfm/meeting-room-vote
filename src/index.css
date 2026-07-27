@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+/* 앱 전체 기본 폰트를 Pretendard로 */
+:root {
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+    system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo",
+    "Noto Sans KR", "Malgun Gothic", sans-serif;
+}
+
+body {
+  margin: 0;
+  background-color: #f7f7fb;
+  -webkit-font-smoothing: antialiased;
+}

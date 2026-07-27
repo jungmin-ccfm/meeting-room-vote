@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm -v)",
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Read(//c/Users/USER/Desktop/**)",
+      "Read(//c/Users/USER/OneDrive/**)",
+      "Read(//c/Users/USER/**)",
+      "Bash(git --version)",
+      "Bash(gh --version)",
+      "Bash(gh auth *)"
+    ]
+  }
+}
