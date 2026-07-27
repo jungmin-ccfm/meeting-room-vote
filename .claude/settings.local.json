@@ -11,7 +11,13 @@
       "Bash(gh --version)",
       "Bash(gh auth *)",
       "Bash(git add *)",
-      "Bash(git commit -q -m '진행상황 문서 업데이트: 현재 위치 및 다음 단계\\(GitHub+Vercel\\) 정리 *)"
+      "Bash(git commit -q -m '진행상황 문서 업데이트: 현재 위치 및 다음 단계\\(GitHub+Vercel\\) 정리 *)",
+      "Bash(node \"C:/Users/USER/AppData/Local/Temp/claude/D--1-----------------------/703d3e08-e4c5-4c9a-82f9-0f35b769fd98/scratchpad/cleanup.mjs\")",
+      "Bash(cp \"C:/Users/USER/AppData/Local/Temp/claude/D--1-----------------------/703d3e08-e4c5-4c9a-82f9-0f35b769fd98/scratchpad/cleanup.mjs\" ./_cleanup_tmp.mjs)",
+      "Bash(node ./_cleanup_tmp.mjs)",
+      "Bash(rm -f ./_cleanup_tmp.mjs)",
+      "Bash(sed -i 's/> 최종 업데이트: 2026-07-27/> 최종 업데이트: 2026-07-27 \\(공모 화면 완료\\)/' 회의실이름앱_진행상황.md)",
+      "Bash(cp 회의실이름앱_진행상황.md \"/c/Users/USER/Desktop/회의실이름앱_진행상황.md\")"
     ]
   }
 }
