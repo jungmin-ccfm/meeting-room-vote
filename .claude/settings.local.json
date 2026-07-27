@@ -9,7 +9,9 @@
       "Read(//c/Users/USER/**)",
       "Bash(git --version)",
       "Bash(gh --version)",
-      "Bash(gh auth *)"
+      "Bash(gh auth *)",
+      "Bash(git add *)",
+      "Bash(git commit -q -m '진행상황 문서 업데이트: 현재 위치 및 다음 단계\\(GitHub+Vercel\\) 정리 *)"
     ]
   }
 }
