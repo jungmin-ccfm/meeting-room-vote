@@ -17,7 +17,8 @@
       "Bash(node ./_cleanup_tmp.mjs)",
       "Bash(rm -f ./_cleanup_tmp.mjs)",
       "Bash(sed -i 's/> 최종 업데이트: 2026-07-27/> 최종 업데이트: 2026-07-27 \\(공모 화면 완료\\)/' 회의실이름앱_진행상황.md)",
-      "Bash(cp 회의실이름앱_진행상황.md \"/c/Users/USER/Desktop/회의실이름앱_진행상황.md\")"
+      "Bash(cp 회의실이름앱_진행상황.md \"/c/Users/USER/Desktop/회의실이름앱_진행상황.md\")",
+      "Bash(node *)"
     ]
   }
 }
