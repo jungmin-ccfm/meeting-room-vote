@@ -40,6 +40,22 @@ export default function AdminPage() {
   const [busy, setBusy] = useState('')
   const [notes, setNotes] = useState({})
   const [subsError, setSubsError] = useState('')
+  const [actError, setActError] = useState('')
+
+  // 되돌리기 어려운 버튼은 팝업 대신 "두 번 누르기"로 확인받습니다.
+  // (팝업은 휴대폰에서 투박하고, 잘못 누르면 되돌릴 수 없어서)
+  const [armed, setArmed] = useState(null)
+  useEffect(() => {
+    if (!armed) return
+    const t = setTimeout(() => setArmed(null), 8000)
+    return () => clearTimeout(t)
+  }, [armed])
+  // 첫 클릭이면 true 를 돌려주고(=아직 실행 안 함), 두 번째 클릭이면 false
+  const needsConfirm = (key) => {
+    if (armed === key) { setArmed(null); return false }
+    setArmed(key)
+    return true
+  }
 
   useEffect(() => {
     if (sessionStorage.getItem(AUTH_KEY)) setAuthed(true)
@@ -111,8 +127,12 @@ export default function AdminPage() {
 
   async function act(fn, label) {
     setBusy(label)
+    setActError('')
     try { await fn(); await reload() }
-    catch (e) { console.error(e); alert('처리에 실패했습니다: ' + (e.message ?? e)) }
+    catch (e) {
+      console.error(e)
+      setActError('처리에 실패했습니다: ' + (e.message ?? e))
+    }
     finally { setBusy('') }
   }
 
@@ -152,29 +172,42 @@ export default function AdminPage() {
         <a href="/" className="text-xs text-gray-400 underline">일반 화면</a>
       </div>
 
+      {actError && (
+        <p className="rounded-xl bg-red-50 px-4 py-3 text-xs leading-relaxed text-red-600">
+          ⚠ {actError}
+        </p>
+      )}
+
       {/* 현재 단계 */}
       <section className="rounded-2xl bg-white p-4 shadow-sm">
         <p className="mb-2 text-xs font-bold text-gray-500">진행 단계</p>
         <div className="grid grid-cols-2 gap-2">
           {PHASES.map((p) => {
             const active = settings.phase === p.key
+            const isArmed = armed === 'phase:' + p.key
             return (
               <button
                 key={p.key} type="button"
                 disabled={active || busy === 'phase'}
                 onClick={() => {
-                  if (!confirm(`"${p.label}" 단계로 바꿀까요?\n\n${p.desc}`)) return
+                  if (needsConfirm('phase:' + p.key)) return
                   act(() => updatePhase(p.key), 'phase')
                 }}
                 className={
                   'rounded-xl px-3 py-2.5 text-left text-xs transition ' +
                   (active
                     ? 'bg-indigo-500 font-bold text-white'
-                    : 'bg-gray-50 text-gray-600 hover:bg-gray-100')
+                    : isArmed
+                      ? 'bg-amber-400 font-bold text-white'
+                      : 'bg-gray-50 text-gray-600 hover:bg-gray-100')
                 }
               >
-                <span className="block font-bold">{p.label}</span>
-                <span className="mt-0.5 block text-[10px] leading-tight opacity-70">{p.desc}</span>
+                <span className="block font-bold">
+                  {isArmed ? '한 번 더 누르면 변경' : p.label}
+                </span>
+                <span className="mt-0.5 block text-[10px] leading-tight opacity-70">
+                  {isArmed ? `"${p.label}" 단계로 바꿉니다` : p.desc}
+                </span>
               </button>
             )
           })}
@@ -273,12 +306,17 @@ export default function AdminPage() {
                     <button
                       type="button" disabled={!!busy}
                       onClick={() => {
-                        if (!confirm(`"${s.name}"을(를) 후보에서 내릴까요?`)) return
+                        if (needsConfirm('down:' + s.id)) return
                         act(() => setSubmissionStatus(s.id, 'removed'), s.id)
                       }}
-                      className="rounded-lg bg-gray-200 px-2.5 py-1 text-[11px] font-bold text-gray-600"
+                      className={
+                        'rounded-lg px-2.5 py-1 text-[11px] font-bold ' +
+                        (armed === 'down:' + s.id
+                          ? 'bg-red-500 text-white'
+                          : 'bg-gray-200 text-gray-600')
+                      }
                     >
-                      내리기
+                      {armed === 'down:' + s.id ? '한 번 더' : '내리기'}
                     </button>
                   )}
                 </li>
@@ -324,12 +362,19 @@ export default function AdminPage() {
           type="button"
           disabled={settings.phase !== 'result' || busy === 'assign'}
           onClick={() => {
-            if (!confirm('방 배정을 다시 하시겠습니까? 기존 배정은 덮어씁니다.')) return
+            if (needsConfirm('assign')) return
             act(assignRoomsRandomly, 'assign')
           }}
-          className="w-full rounded-xl bg-gray-800 py-2.5 text-xs font-bold text-white disabled:bg-gray-300"
+          className={
+            'w-full rounded-xl py-2.5 text-xs font-bold text-white disabled:bg-gray-300 ' +
+            (armed === 'assign' ? 'bg-amber-500' : 'bg-gray-800')
+          }
         >
-          {busy === 'assign' ? '배정 중...' : '무작위로 방 배정하기'}
+          {busy === 'assign'
+            ? '배정 중...'
+            : armed === 'assign'
+              ? '한 번 더 누르면 배정 (기존 배정은 덮어씁니다)'
+              : '무작위로 방 배정하기'}
         </button>
         {rooms.some((r) => r.assigned_name) && (
           <ul className="mt-3 space-y-0.5 text-[11px] text-gray-500">

@@ -18,7 +18,16 @@
       "Bash(rm -f ./_cleanup_tmp.mjs)",
       "Bash(sed -i 's/> 최종 업데이트: 2026-07-27/> 최종 업데이트: 2026-07-27 \\(공모 화면 완료\\)/' 회의실이름앱_진행상황.md)",
       "Bash(cp 회의실이름앱_진행상황.md \"/c/Users/USER/Desktop/회의실이름앱_진행상황.md\")",
-      "Bash(node *)"
+      "Bash(node *)",
+      "Bash(cp \"C:/Users/USER/AppData/Local/Temp/claude/D--1-----------------------/703d3e08-e4c5-4c9a-82f9-0f35b769fd98/scratchpad/verify.mjs\" ./_verify_tmp.mjs)",
+      "Bash(rm -f ./_verify_tmp.mjs)",
+      "Bash(cp \"C:/Users/USER/AppData/Local/Temp/claude/D--1-----------------------/703d3e08-e4c5-4c9a-82f9-0f35b769fd98/scratchpad/seed.mjs\" ./_seed_tmp.mjs)",
+      "Bash(rm -f ./_seed_tmp.mjs)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173/)",
+      "Bash(curl -s \"http://localhost:5173/src/pages/AdminPage.jsx\")",
+      "Bash(curl -s -o /dev/null -w \"5173: %{http_code}\\\\n\" http://localhost:5173/)",
+      "Bash(curl -s -o /dev/null -w \"5174: %{http_code}\\\\n\" http://localhost:5174/)",
+      "Bash(git commit *)"
     ]
   }
 }
