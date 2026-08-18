@@ -8,7 +8,7 @@
 // 보안에 대해: 이 앱은 브라우저에서 직접 DB에 접속하는 구조라, 비밀번호 확인도
 // 브라우저에서 합니다. 사내 이벤트 수준에서는 충분하지만 완벽한 잠금은 아닙니다.
 // "누가 어떤 이름을 냈는지"는 Supabase 대시보드에서만 볼 수 있게 따로 막아뒀습니다.
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { GROUPS } from '../lib/config'
 import {
   fetchSettings, updatePhase, updateNotes,
@@ -39,6 +39,9 @@ export default function AdminPage() {
   const [tab, setTab] = useState('pending')
   const [busy, setBusy] = useState('')
   const [notes, setNotes] = useState({})
+  const [notesSaved, setNotesSaved] = useState(false)
+  // 안내문을 입력하는 중에는 10초 자동 새로고침이 입력을 덮어쓰지 않게 합니다
+  const notesDirtyRef = useRef(false)
   const [subsError, setSubsError] = useState('')
   const [actError, setActError] = useState('')
 
@@ -74,11 +77,13 @@ export default function AdminPage() {
 
     if (s.status === 'fulfilled') {
       setSettings(s.value)
-      setNotes({
-        theme_main: s.value.theme_main ?? '',
-        theme_floor10: s.value.theme_floor10 ?? '',
-        theme_floor8: s.value.theme_floor8 ?? '',
-      })
+      if (!notesDirtyRef.current) {
+        setNotes({
+          theme_main: s.value.theme_main ?? '',
+          theme_floor10: s.value.theme_floor10 ?? '',
+          theme_floor8: s.value.theme_floor8 ?? '',
+        })
+      }
     } else {
       console.error('설정 조회 실패:', s.reason)
     }
@@ -284,14 +289,20 @@ export default function AdminPage() {
             {tab === 'pending' ? '확인할 이름이 없습니다 👍' : '없습니다'}
           </p>
         ) : (
-          <ul className="max-h-96 space-y-1.5 overflow-y-auto">
-            {shown.map((s) => {
-              const g = GROUPS.find((x) => x.key === s.group_key)
+          <div className="max-h-96 space-y-3 overflow-y-auto">
+            {GROUPS.map((g) => {
+              const items = shown.filter((s) => s.group_key === g.key)
+              if (items.length === 0) return null
               return (
+                <div key={g.key}>
+                  <p className="mb-1.5 border-b border-gray-100 pb-1 text-[11px] font-bold text-gray-500">
+                    {g.title} <span className="font-medium text-gray-400">({items.length}개)</span>
+                  </p>
+                  <ul className="space-y-1.5">
+                    {items.map((s) => (
                 <li key={s.id} className="flex items-center gap-2 rounded-xl bg-gray-50 px-3 py-2">
                   <span className="flex-1 truncate">
                     <span className="text-sm font-semibold text-gray-800">{s.name}</span>
-                    <span className="ml-1.5 text-[10px] text-gray-400">{g?.title}</span>
                   </span>
                   {s.status !== 'ok' && (
                     <button
@@ -320,9 +331,12 @@ export default function AdminPage() {
                     </button>
                   )}
                 </li>
+                    ))}
+                  </ul>
+                </div>
               )
             })}
-          </ul>
+          </div>
         )}
       </section>
 
@@ -337,7 +351,11 @@ export default function AdminPage() {
             <span className="mb-1 block text-xs font-semibold text-gray-600">{g.title}</span>
             <textarea
               rows={2} value={notes[g.themeField] ?? ''}
-              onChange={(e) => setNotes((p) => ({ ...p, [g.themeField]: e.target.value }))}
+              onChange={(e) => {
+                notesDirtyRef.current = true
+                setNotesSaved(false)
+                setNotes((p) => ({ ...p, [g.themeField]: e.target.value }))
+              }}
               placeholder={g.defaultNote}
               className="w-full resize-none rounded-xl border border-gray-200 px-3 py-2 text-xs outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
             />
@@ -345,10 +363,19 @@ export default function AdminPage() {
         ))}
         <button
           type="button" disabled={busy === 'notes'}
-          onClick={() => act(() => updateNotes(notes), 'notes')}
-          className="w-full rounded-xl bg-gray-800 py-2.5 text-xs font-bold text-white disabled:bg-gray-300"
+          onClick={() =>
+            act(async () => {
+              await updateNotes(notes)
+              notesDirtyRef.current = false
+              setNotesSaved(true)
+            }, 'notes')
+          }
+          className={
+            'w-full rounded-xl py-2.5 text-xs font-bold text-white disabled:bg-gray-300 ' +
+            (notesSaved ? 'bg-green-600' : 'bg-gray-800')
+          }
         >
-          {busy === 'notes' ? '저장 중...' : '안내문 저장'}
+          {busy === 'notes' ? '저장 중...' : notesSaved ? '저장됐습니다 ✓' : '안내문 저장'}
         </button>
       </section>
 
