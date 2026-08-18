@@ -8,7 +8,7 @@
 //    비슷한 걸 합칠지 말지는 담당자가 아니라 낸 사람이 정합니다.
 //  - 금칙어·직급 단어가 들어가면 바로 공개되지 않고 담당자 확인을 기다립니다.
 import { useEffect, useMemo, useState } from 'react'
-import { GROUPS, NAME_MAX } from '../lib/config'
+import { GROUPS, NAME_MAX, isKiosk } from '../lib/config'
 import { submitIdeas, countParticipants, countSubmissions, fetchSubmissions } from '../lib/db'
 import { tidy, normalize, findLookalikes, screenName } from '../lib/text'
 
@@ -172,13 +172,15 @@ export default function SubmissionPage({ settings }) {
           투표 안내가 오면 한 번 더 참여해 주세요!
         </p>
 
-        <button
-          type="button"
-          onClick={resetForNextPerson}
-          className="mt-8 text-xs text-gray-400 underline"
-        >
-          다른 사람이 이어서 제출하기
-        </button>
+        {isKiosk() && (
+          <button
+            type="button"
+            onClick={resetForNextPerson}
+            className="mt-8 text-xs text-gray-400 underline"
+          >
+            다른 사람이 이어서 제출하기
+          </button>
+        )}
       </div>
     )
   }

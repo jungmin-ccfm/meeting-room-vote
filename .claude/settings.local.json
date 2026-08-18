@@ -27,7 +27,18 @@
       "Bash(curl -s \"http://localhost:5173/src/pages/AdminPage.jsx\")",
       "Bash(curl -s -o /dev/null -w \"5173: %{http_code}\\\\n\" http://localhost:5173/)",
       "Bash(curl -s -o /dev/null -w \"5174: %{http_code}\\\\n\" http://localhost:5174/)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Skill(schedule)",
+      "Bash(cp \"C:/Users/USER/AppData/Local/Temp/claude/D--1-----------------------/703d3e08-e4c5-4c9a-82f9-0f35b769fd98/scratchpad/dryrun_seed.mjs\" ./_dryrun_tmp.mjs)",
+      "Bash(rm -f ./_dryrun_tmp.mjs)",
+      "Bash(sed -e \"s/{key:'main', label:'대회의실', pick:1, k:1}/{key:'main',label:'대회의실 1표',pick:1,k:1},{key:'main2',label:'대회의실 2표',pick:1,k:2},{key:'main3',label:'대회의실 3표',pick:1,k:3}/\" -e \"s/,\\\\n {key:'f10'//\" sim14.mjs)",
+      "Bash(sed -i \"s/ {key:'f10', label:'10층', pick:6, k:3},//; s/ {key:'f8', label:'8층', pick:4, k:2},//\" sim15.mjs)",
+      "Bash(ipconfig)",
+      "PowerShell(Get-NetFirewallProfile *)",
+      "PowerShell(Get-ChildItem -File | Select-Object Name; Get-ChildItem -Directory | Where-Object { $_.Name -ne 'node_modules' -and $_.Name -ne '.git' } | Select-Object Name)",
+      "PowerShell(node \"C:\\\\Users\\\\USER\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\D--1-----------------------\\\\2c340604-1a4f-4e29-8e9c-d05a967c0e50\\\\scratchpad\\\\vote_sim.mjs\")",
+      "PowerShell(node \"C:\\\\Users\\\\USER\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\D--1-----------------------\\\\2c340604-1a4f-4e29-8e9c-d05a967c0e50\\\\scratchpad\\\\vote_sim_compare.mjs\")",
+      "PowerShell(npm run *)"
     ]
   }
 }
