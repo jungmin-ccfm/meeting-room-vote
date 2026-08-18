@@ -4,3 +4,4 @@ dist
 .env.local
 *.log
 .DS_Store
+회의실이름앱_진행상황.md
