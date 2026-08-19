@@ -215,7 +215,6 @@ export default function SubmissionPage({ settings }) {
           <ul className="space-y-0.5 text-xs leading-relaxed text-gray-500">
             <li>· 소리 내어 부르기 쉬운 이름</li>
             <li>· 처음 온 손님도 알아들을 수 있는 이름</li>
-            <li>· 몇 년 뒤에도 안 어색한 이름</li>
           </ul>
         </div>
         <div className="mb-3">
@@ -227,10 +226,10 @@ export default function SubmissionPage({ settings }) {
         </div>
         <div className="rounded-xl bg-gray-50 px-3 py-2.5">
           <p className="mb-1 text-xs font-bold text-gray-600">📋 제출된 이름은 검토 후 후보에 올라가요</p>
-          <ul className="space-y-0.5 text-[11px] leading-relaxed text-gray-500">
+          <ul className="space-y-0.5 break-keep text-[11px] leading-relaxed text-gray-500">
             <li>· 오타, 초성, 장난 이름은 후보에서 제외될 수 있어요.</li>
-            <li>· 전 직원과 손님이 함께 쓰는 공간인 만큼, 어울리지 않는 표현도 제외될 수 있어요.</li>
-            <li>· 비슷한 이름이 여럿 들어오면 하나로 합쳐질 수 있어요.</li>
+            <li>· 함께 쓰는 공간에 어울리지 않는 표현도 제외될 수 있어요.</li>
+            <li>· 비슷한 이름이 여럿 오면 하나로 합쳐질 수 있어요.</li>
           </ul>
         </div>
       </section>
