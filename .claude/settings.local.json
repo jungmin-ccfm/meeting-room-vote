@@ -38,7 +38,19 @@
       "PowerShell(Get-ChildItem -File | Select-Object Name; Get-ChildItem -Directory | Where-Object { $_.Name -ne 'node_modules' -and $_.Name -ne '.git' } | Select-Object Name)",
       "PowerShell(node \"C:\\\\Users\\\\USER\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\D--1-----------------------\\\\2c340604-1a4f-4e29-8e9c-d05a967c0e50\\\\scratchpad\\\\vote_sim.mjs\")",
       "PowerShell(node \"C:\\\\Users\\\\USER\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\D--1-----------------------\\\\2c340604-1a4f-4e29-8e9c-d05a967c0e50\\\\scratchpad\\\\vote_sim_compare.mjs\")",
-      "PowerShell(npm run *)"
+      "PowerShell(npm run *)",
+      "PowerShell($h = @{ apikey = \"sb_publishable_cas43yaXKvWO-SzMeiF3EA_WqdQWZhB\" }; \"== 저장 확인 ==\"; \\(Invoke-RestMethod -Uri \"https://jagzqsozxdlswxasqgop.supabase.co/rest/v1/submissions?select=group_key,name,status\" -Headers $h\\) | Format-Table; \\(Invoke-RestMethod -Uri \"https://jagzqsozxdlswxasqgop.supabase.co/rest/v1/participants?select=person_name,department,phase\" -Headers $h\\) | Format-Table)",
+      "PowerShell($h = @{ apikey = \"sb_publishable_cas43yaXKvWO-SzMeiF3EA_WqdQWZhB\"; Prefer = \"return=representation\" }; \"== 테스트 데이터 삭제 ==\"; \\(Invoke-RestMethod -Method Delete -Uri \"https://jagzqsozxdlswxasqgop.supabase.co/rest/v1/submissions?name=in.\\(%22테스트홀%22,%22테스트룸%22,%22테스트라운지%22\\)\" -Headers $h\\).Count.ToString\\(\\) + \"개 이름 삭제\"; \\(Invoke-RestMethod -Method Delete -Uri \"https://jagzqsozxdlswxasqgop.supabase.co/rest/v1/participants?person_name=eq.테스트&department=eq.테스트팀\" -Headers $h\\).Count.ToString\\(\\) + \"명 참여기록 삭제\"; \"== 삭제 후 확인 ==\"; $h2 = @{ apikey = \"sb_publishable_cas43yaXKvWO-SzMeiF3EA_WqdQWZhB\" }; \"남은 이름: \" + \\(Invoke-RestMethod -Uri \"https://jagzqsozxdlswxasqgop.supabase.co/rest/v1/submissions?select=id\" -Headers $h2\\).Count + \"개, 남은 참여자: \" + \\(Invoke-RestMethod -Uri \"https://jagzqsozxdlswxasqgop.supabase.co/rest/v1/participants?select=id\" -Headers $h2\\).Count + \"명\")",
+      "PowerShell(git *)",
+      "PowerShell(git push *)",
+      "PowerShell(Start-Process powershell -ArgumentList '-NoExit', '-Command', \"cd 'D:\\\\1_브커팀이정민\\\\브랜드톤앤매너가이드\\\\회의실명'; git push -u origin main\")",
+      "PowerShell($html = \\(Invoke-WebRequest -Uri \"https://meeting-room-vote.vercel.app/\" -UseBasicParsing\\).Content; $js = [regex]::Match\\($html, '/assets/index-[^\"]+\\\\.js'\\).Value; \"번들: $js\"; $bundle = \\(Invoke-WebRequest -Uri \"https://meeting-room-vote.vercel.app$js\" -UseBasicParsing\\).Content; \"hoiuisil 포함 여부: \" + $bundle.Contains\\(\"hoiuisil2026\"\\); \"supabase 주소 포함 여부: \" + $bundle.Contains\\(\"jagzqsozxdlswxasqgop\"\\))",
+      "Bash(git push *)",
+      "PowerShell($html = \\(Invoke-WebRequest -Uri \"https://meeting-room-vote.vercel.app/\" -UseBasicParsing\\).Content; [regex]::Match\\($html, '/assets/index-[^\"]+\\\\.js'\\).Value)",
+      "Bash(echo \"회의실이름앱_진행상황.md\")",
+      "Bash(git rm *)",
+      "Bash(FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch --force --index-filter 'git rm --cached --ignore-unmatch 회의실이름앱_진행상황.md' --prune-empty -- --all)",
+      "Bash(git stash *)"
     ]
   }
 }

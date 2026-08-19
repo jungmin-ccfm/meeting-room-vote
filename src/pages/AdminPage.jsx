@@ -242,18 +242,31 @@ export default function AdminPage() {
             </tr>
           </thead>
           <tbody>
-            {GROUPS.map((g) => (
-              <tr key={g.key} className="border-t border-gray-100">
-                <td className="py-1.5 text-gray-600">{g.title}</td>
-                <td className="text-center font-bold text-gray-800">{gc[g.key].ok}</td>
-                <td className={'text-center font-bold ' + (gc[g.key].pending ? 'text-amber-600' : 'text-gray-300')}>
-                  {gc[g.key].pending}
-                </td>
-                <td className="text-center text-gray-300">{gc[g.key].removed}</td>
-              </tr>
-            ))}
+            {GROUPS.map((g) => {
+              // 후보가 방 개수(pick)보다 적으면 결과 발표 때 이름 없는 방이 생깁니다
+              const short = gc[g.key].ok < g.pick
+              return (
+                <tr key={g.key} className="border-t border-gray-100">
+                  <td className="py-1.5 text-gray-600">{g.title}</td>
+                  <td className={'text-center font-bold ' + (short ? 'text-red-500' : 'text-gray-800')}>
+                    {short && '⚠ '}{gc[g.key].ok}
+                    <span className="ml-0.5 font-medium text-gray-300">/{g.pick}</span>
+                  </td>
+                  <td className={'text-center font-bold ' + (gc[g.key].pending ? 'text-amber-600' : 'text-gray-300')}>
+                    {gc[g.key].pending}
+                  </td>
+                  <td className="text-center text-gray-300">{gc[g.key].removed}</td>
+                </tr>
+              )
+            })}
           </tbody>
         </table>
+        {GROUPS.some((g) => gc[g.key].ok < g.pick) && settings?.phase !== 'result' && (
+          <p className="mt-2 rounded-xl bg-red-50 px-3 py-2.5 text-[11px] leading-relaxed text-red-600">
+            ⚠ <b>후보가 방 개수보다 적은 그룹이 있어요.</b> 이대로 결과를 공개하면 이름 없는
+            방이 생깁니다. 공모 마감을 미루고 참여를 독려하거나, 후보를 더 모아주세요.
+          </p>
+        )}
       </section>
 
       {/* 이름 관리 */}
