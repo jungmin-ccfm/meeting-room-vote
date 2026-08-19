@@ -288,6 +288,14 @@ export default function VotingPage() {
           </span>
         </div>
 
+        {/* 공간 사진 — public/rooms/{키}.jpg 파일이 있을 때만 보입니다 */}
+        <img
+          src={`/rooms/${group.key}.jpg`}
+          alt=""
+          onError={(e) => { e.currentTarget.style.display = 'none' }}
+          className="mb-3 h-32 w-full rounded-xl object-cover"
+        />
+
         {/* 몇 개를 고르고 몇 개가 뽑히는지 헷갈리지 않게 분명히 씁니다.
             (고르는 개수 ≠ 선정되는 개수) */}
         <p className="mb-3 text-xs leading-relaxed text-gray-500">

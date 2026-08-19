@@ -263,6 +263,14 @@ export default function SubmissionPage({ settings }) {
               </span>
             </div>
 
+            {/* 공간 사진 — public/rooms/{키}.jpg 파일이 있을 때만 보입니다 */}
+            <img
+              src={`/rooms/${group.key}.jpg`}
+              alt=""
+              onError={(e) => { e.currentTarget.style.display = 'none' }}
+              className="mb-3 h-36 w-full rounded-xl object-cover"
+            />
+
             <p className="mb-4 rounded-xl bg-indigo-50 px-3 py-2 text-xs leading-relaxed text-indigo-700">
               💡 {note}
             </p>
