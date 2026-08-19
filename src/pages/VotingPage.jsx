@@ -10,7 +10,7 @@
 //    그 그룹이 담합에 취약해집니다.
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { GROUPS, isKiosk } from '../lib/config'
-import { fetchSubmissions, submitVotes, countParticipants } from '../lib/db'
+import { fetchSubmissions, submitVotes, countParticipants, hasParticipant } from '../lib/db'
 import { tidy, shuffleWithSeed } from '../lib/text'
 
 const DONE_KEY = 'mrv_voting_done_v1'
@@ -40,7 +40,16 @@ export default function VotingPage() {
   const nameRef = useRef(null)
 
   useEffect(() => {
-    if (localStorage.getItem(DONE_KEY)) setView('done')
+    const saved = localStorage.getItem(DONE_KEY)
+    if (!saved) return
+    setView('done')
+    // 서버 데이터가 초기화됐는데 이 브라우저에만 완료 표시가 남았으면 자동 해제
+    hasParticipant(saved, 'voting').then((exists) => {
+      if (exists === false) {
+        localStorage.removeItem(DONE_KEY)
+        setView('form')
+      }
+    })
   }, [])
 
   useEffect(() => {

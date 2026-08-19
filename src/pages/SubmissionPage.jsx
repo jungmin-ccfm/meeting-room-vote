@@ -9,7 +9,7 @@
 //  - 금칙어·직급 단어가 들어가면 바로 공개되지 않고 담당자 확인을 기다립니다.
 import { useEffect, useMemo, useState } from 'react'
 import { GROUPS, NAME_MAX, isKiosk } from '../lib/config'
-import { submitIdeas, countParticipants, countSubmissions, fetchSubmissions } from '../lib/db'
+import { submitIdeas, countParticipants, countSubmissions, fetchSubmissions, hasParticipant } from '../lib/db'
 import { tidy, normalize, findLookalikes, screenName } from '../lib/text'
 
 const DONE_KEY = 'mrv_submission_done_v2'
@@ -33,7 +33,16 @@ export default function SubmissionPage({ settings }) {
   const [nameCount, setNameCount] = useState(null)
 
   useEffect(() => {
-    if (localStorage.getItem(DONE_KEY)) setView('done')
+    const saved = localStorage.getItem(DONE_KEY)
+    if (!saved) return
+    setView('done')
+    // 서버 데이터가 초기화됐는데 이 브라우저에만 완료 표시가 남았으면 자동 해제
+    hasParticipant(saved, 'submission').then((exists) => {
+      if (exists === false) {
+        localStorage.removeItem(DONE_KEY)
+        setView('form')
+      }
+    })
   }, [])
 
   // 중복·유사 검사에 쓸 기존 이름 목록을 미리 받아둡니다.

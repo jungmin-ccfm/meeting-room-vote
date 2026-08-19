@@ -158,6 +158,18 @@ export async function submitVotes({ personName, department, submissionIds }) {
 // ---------------------------------------------------------------
 // 참여 현황 (몇 명 참여했는지. 득표수와는 무관하므로 언제든 공개 가능)
 // ---------------------------------------------------------------
+// 브라우저에 남은 "참여 완료" 표시가 서버 기록과 맞는지 확인용.
+// 서버 데이터가 초기화되어 기록이 없으면 false. 오류면 null(판단 보류).
+export async function hasParticipant(personName, phase) {
+  const { count, error } = await supabase
+    .from('participants')
+    .select('id', { count: 'exact', head: true })
+    .eq('person_name', tidy(personName))
+    .eq('phase', phase)
+  if (error) { console.error(error); return null }
+  return count > 0
+}
+
 export async function countParticipants(phase) {
   const { count, error } = await supabase
     .from('participants')
