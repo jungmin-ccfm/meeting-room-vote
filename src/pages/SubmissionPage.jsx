@@ -237,7 +237,7 @@ export default function SubmissionPage({ settings }) {
           <span className="mb-1 block text-sm font-semibold text-gray-600">부서</span>
           <input
             type="text" value={department} onChange={(e) => setDepartment(e.target.value)}
-            maxLength={30} placeholder="예: 브랜드커뮤니케이션팀"
+            maxLength={30} placeholder="예: 마케팅사업부 1본부 5팀"
             className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
           />
         </label>

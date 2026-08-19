@@ -223,7 +223,7 @@ export default function VotingPage() {
           <input
             ref={nameRef}
             type="text" value={personName} onChange={(e) => setPersonName(e.target.value)}
-            maxLength={20} placeholder="이름"
+            maxLength={20} placeholder="예: 홍길동"
             className={
               'w-1/3 rounded-xl border px-3 py-2.5 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 ' +
               (allGroupsDone && !tidy(personName) ? 'border-amber-400 bg-amber-50' : 'border-gray-200')
@@ -231,7 +231,7 @@ export default function VotingPage() {
           />
           <input
             type="text" value={department} onChange={(e) => setDepartment(e.target.value)}
-            maxLength={30} placeholder="부서"
+            maxLength={30} placeholder="예: 마케팅사업부 1본부 5팀"
             className={
               'flex-1 rounded-xl border px-3 py-2.5 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 ' +
               (allGroupsDone && !tidy(department) ? 'border-amber-400 bg-amber-50' : 'border-gray-200')
