@@ -206,6 +206,11 @@ export default function SubmissionPage({ settings }) {
           <br />
           매일 부르고, 손님을 모실 때 안내하는 이름입니다.
         </p>
+        <p className="mt-3 rounded-xl bg-indigo-50 px-4 py-2.5 text-xs font-medium leading-relaxed text-indigo-700">
+          ✍️ 후보 제출은 자율이에요. 세 회의실 모두 채우지 않아도 괜찮아요.
+          <br />
+          마음에 드는 회의실에만, <b>회의실마다 최대 1개</b>씩 적어주세요.
+        </p>
       </div>
 
       {/* 안내 */}
@@ -336,7 +341,11 @@ export default function SubmissionPage({ settings }) {
         >
           {submitting ? '제출 중...' : `제출하기 (이름 ${items.length}개)`}
         </button>
-        <p className="mt-2 text-center text-xs text-gray-400">제출 후에는 수정할 수 없습니다.</p>
+        <p className="mt-2 text-center text-xs text-gray-400">
+          {items.length === 0
+            ? '이름을 하나 이상 적으면 제출할 수 있어요. (모든 회의실을 채울 필요는 없어요)'
+            : '제출 후에는 수정할 수 없습니다.'}
+        </p>
       </div>
     </form>
   )
