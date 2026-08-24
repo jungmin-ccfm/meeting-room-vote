@@ -56,7 +56,6 @@ export const DEPARTMENTS = [
       { value: '마케팅1본부 1팀', short: '1팀' },
       { value: '마케팅1본부 2팀', short: '2팀' },
       { value: '마케팅1본부 6팀', short: '6팀' },
-      { value: '마케팅1본부 콘텐츠팀', short: '콘텐츠팀' },
       { value: '마케팅1본부 AI콘텐츠1팀', short: 'AI콘텐츠 1팀' },
     ],
   },
