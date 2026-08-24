@@ -75,16 +75,11 @@ export const DEPARTMENTS = [
       { value: '브랜드2본부', short: '브랜드2본부' },
     ],
   },
-  // teams 없이 value 만 있으면 세부 팀 없이 통째로 하나의 선택지가 됩니다
+  // teams 없이 value 만 있으면 세부 팀 없이 통째로 하나의 선택지가 됩니다 (볼드로 표시)
   { value: '브랜드커뮤니케이션팀' },
   { value: '경영관리실' },
-  {
-    label: '그 외',
-    teams: [
-      { value: '교육팀', short: '교육팀' },
-      { value: 'AX팀', short: 'AX팀' },
-    ],
-  },
+  { value: '교육팀' },
+  { value: 'AX팀' },
 ]
 
 // 진행 단계 표시(상단 스텝바)에 쓰는 3단계
