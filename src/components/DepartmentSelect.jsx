@@ -35,15 +35,21 @@ export default function DepartmentSelect({ value, onChange, highlight = false, c
         <option value="" disabled>
           부서(팀) 선택
         </option>
-        {DEPARTMENTS.map((group) => (
-          <optgroup key={group.label} label={group.label}>
-            {group.teams.map((t) => (
-              <option key={t.value} value={t.value}>
-                {t.short}
-              </option>
-            ))}
-          </optgroup>
-        ))}
+        {DEPARTMENTS.map((group) =>
+          group.teams ? (
+            <optgroup key={group.label} label={group.label}>
+              {group.teams.map((t) => (
+                <option key={t.value} value={t.value}>
+                  {t.short}
+                </option>
+              ))}
+            </optgroup>
+          ) : (
+            <option key={group.value} value={group.value}>
+              {group.value}
+            </option>
+          ),
+        )}
         <option value={ETC}>기타 (직접 입력)</option>
       </select>
 

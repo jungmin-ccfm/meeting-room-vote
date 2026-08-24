@@ -76,20 +76,9 @@ export const DEPARTMENTS = [
       { value: '브랜드2본부', short: '브랜드2본부' },
     ],
   },
-  {
-    label: '브랜드커뮤니케이션팀',
-    teams: [
-      { value: '브랜드마케팅팀', short: '브랜드마케팅팀' },
-      { value: '디자인팀', short: '디자인팀' },
-    ],
-  },
-  {
-    label: '경영관리실',
-    teams: [
-      { value: '재무회계팀', short: '재무회계팀' },
-      { value: '인사총무팀', short: '인사총무팀' },
-    ],
-  },
+  // teams 없이 value 만 있으면 세부 팀 없이 통째로 하나의 선택지가 됩니다
+  { value: '브랜드커뮤니케이션팀' },
+  { value: '경영관리실' },
   {
     label: '그 외',
     teams: [
