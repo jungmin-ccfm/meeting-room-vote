@@ -207,9 +207,9 @@ export default function SubmissionPage({ settings }) {
           매일 부르고, 손님을 모실 때 안내하는 이름입니다.
         </p>
         <p className="mt-3 rounded-xl bg-indigo-50 px-4 py-2.5 text-xs font-medium leading-relaxed text-indigo-700">
-          ✍️ 후보 제출은 자율이에요. 세 회의실 모두 채우지 않아도 괜찮아요.
+          ✍️ 세 회의실 모두 채우지 않아도 괜찮아요.
           <br />
-          마음에 드는 회의실에만, <b>회의실마다 최대 1개</b>씩 적어주세요.
+          마음에 드는 회의실에 <b>최소 1개는 제출</b>해 주세요! (회의실마다 최대 1개)
         </p>
       </div>
 
