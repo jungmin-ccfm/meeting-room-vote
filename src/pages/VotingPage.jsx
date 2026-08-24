@@ -12,6 +12,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { GROUPS, isKiosk } from '../lib/config'
 import { fetchSubmissions, submitVotes, countParticipants, hasParticipant } from '../lib/db'
 import { tidy, shuffleWithSeed } from '../lib/text'
+import DepartmentSelect from '../components/DepartmentSelect'
 
 const DONE_KEY = 'mrv_voting_done_v1'
 const SEED_KEY = 'mrv_voting_seed_v1'
@@ -238,13 +239,11 @@ export default function VotingPage() {
               (allGroupsDone && !tidy(personName) ? 'border-amber-400 bg-amber-50' : 'border-gray-200')
             }
           />
-          <input
-            type="text" value={department} onChange={(e) => setDepartment(e.target.value)}
-            maxLength={30} placeholder="예: 마케팅사업부 1본부 5팀"
-            className={
-              'flex-1 rounded-xl border px-3 py-2.5 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 ' +
-              (allGroupsDone && !tidy(department) ? 'border-amber-400 bg-amber-50' : 'border-gray-200')
-            }
+          <DepartmentSelect
+            value={department}
+            onChange={setDepartment}
+            compact
+            highlight={allGroupsDone && !tidy(department)}
           />
         </div>
         <p className="mt-2 text-xs leading-relaxed text-gray-400">

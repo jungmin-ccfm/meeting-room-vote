@@ -11,6 +11,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { GROUPS, NAME_MAX, isKiosk } from '../lib/config'
 import { submitIdeas, countParticipants, countSubmissions, fetchSubmissions, hasParticipant } from '../lib/db'
 import { tidy, normalize, findLookalikes, screenName } from '../lib/text'
+import DepartmentSelect from '../components/DepartmentSelect'
 
 const DONE_KEY = 'mrv_submission_done_v2'
 
@@ -256,11 +257,7 @@ export default function SubmissionPage({ settings }) {
         </label>
         <label className="block">
           <span className="mb-1 block text-sm font-semibold text-gray-600">부서</span>
-          <input
-            type="text" value={department} onChange={(e) => setDepartment(e.target.value)}
-            maxLength={30} placeholder="예: 마케팅사업부 1본부 5팀"
-            className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
-          />
+          <DepartmentSelect value={department} onChange={setDepartment} />
         </label>
       </section>
 

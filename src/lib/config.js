@@ -44,6 +44,61 @@ export const GROUPS = [
 
 export const getGroup = (key) => GROUPS.find((g) => g.key === key)
 
+// 부서(팀) 드롭다운 목록 — 조직도 기준.
+// 자유 입력이면 같은 팀을 서로 다르게 적어 중복 참여 확인이 어긋날 수 있어서
+// 드롭다운으로 표기를 통일합니다. 목록에 없는 소속은 "기타 (직접 입력)"으로 받습니다.
+// - value: 실제로 저장되는 문자열 (혼자 봐도 어느 팀인지 알 수 있게 본부명 포함)
+// - short: 드롭다운 안에서 보여주는 짧은 이름
+export const DEPARTMENTS = [
+  {
+    label: '마케팅1본부',
+    teams: [
+      { value: '마케팅1본부 1팀', short: '1팀' },
+      { value: '마케팅1본부 2팀', short: '2팀' },
+      { value: '마케팅1본부 6팀', short: '6팀' },
+      { value: '마케팅1본부 콘텐츠팀', short: '콘텐츠팀' },
+      { value: '마케팅1본부 AI콘텐츠1팀', short: 'AI콘텐츠 1팀' },
+    ],
+  },
+  {
+    label: '마케팅2본부',
+    teams: [
+      { value: '마케팅2본부 3팀', short: '3팀' },
+      { value: '마케팅2본부 4팀', short: '4팀' },
+      { value: '마케팅2본부 5팀', short: '5팀' },
+      { value: '마케팅2본부 AI콘텐츠2팀', short: 'AI콘텐츠 2팀' },
+    ],
+  },
+  {
+    label: '브랜드사업부',
+    teams: [
+      { value: '브랜드1본부', short: '브랜드1본부' },
+      { value: '브랜드2본부', short: '브랜드2본부' },
+    ],
+  },
+  {
+    label: '브랜드커뮤니케이션팀',
+    teams: [
+      { value: '브랜드마케팅팀', short: '브랜드마케팅팀' },
+      { value: '디자인팀', short: '디자인팀' },
+    ],
+  },
+  {
+    label: '경영관리실',
+    teams: [
+      { value: '재무회계팀', short: '재무회계팀' },
+      { value: '인사총무팀', short: '인사총무팀' },
+    ],
+  },
+  {
+    label: '그 외',
+    teams: [
+      { value: '교육팀', short: '교육팀' },
+      { value: 'AX팀', short: 'AX팀' },
+    ],
+  },
+]
+
 // 진행 단계 표시(상단 스텝바)에 쓰는 3단계
 export const STEPS = [
   { key: 'submission', label: '공모' },
