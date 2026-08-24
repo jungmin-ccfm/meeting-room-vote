@@ -255,10 +255,12 @@ export default function SubmissionPage({ settings }) {
             className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
           />
         </label>
-        <label className="block">
+        {/* 주의: label 로 감싸면 클릭이 안의 버튼으로 한 번 더 전달되어
+            드롭다운이 닫히자마자 다시 열립니다. 꼭 div 로 둘 것. */}
+        <div>
           <span className="mb-1 block text-sm font-semibold text-gray-600">부서</span>
           <DepartmentSelect value={department} onChange={setDepartment} />
-        </label>
+        </div>
       </section>
 
       {/* 그룹별 이름 후보 */}

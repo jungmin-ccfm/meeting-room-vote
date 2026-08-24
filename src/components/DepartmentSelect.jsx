@@ -47,10 +47,18 @@ export default function DepartmentSelect({ value, onChange, highlight = false, c
 
       {open && (
         <>
-          {/* 바깥을 누르면 닫히도록 하는 투명 배경 */}
-          <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
+          {/* 바깥을 누르면 닫히도록 하는 투명 배경.
+              preventDefault: label 등으로 감싸였을 때 클릭이 여닫이 버튼으로
+              한 번 더 전달되어 닫히자마자 다시 열리는 것을 막습니다. */}
+          <div
+            className="fixed inset-0 z-10"
+            onClick={(e) => { e.preventDefault(); setOpen(false) }}
+          />
 
-          <div className="absolute left-0 right-0 top-full z-20 mt-1.5 max-h-80 overflow-y-auto rounded-xl border border-gray-100 bg-white py-1.5 shadow-xl shadow-gray-200/60">
+          <div
+            className="absolute left-0 right-0 top-full z-20 mt-1.5 max-h-80 overflow-y-auto rounded-xl border border-gray-100 bg-white py-1.5 shadow-xl shadow-gray-200/60"
+            onClick={(e) => e.preventDefault()}
+          >
             {DEPARTMENTS.map((entry) =>
               entry.teams ? (
                 // 본부 그룹: 볼드 제목 + 들여쓴 팀 목록
