@@ -76,6 +76,7 @@ export const DEPARTMENTS = [
     ],
   },
   // teams 없이 value 만 있으면 세부 팀 없이 통째로 하나의 선택지가 됩니다 (볼드로 표시)
+  { value: '유통사업팀' },
   { value: '브랜드커뮤니케이션팀' },
   { value: '경영관리실' },
   { value: '교육팀' },
