@@ -271,6 +271,26 @@ export async function assignRoomsRandomly() {
 }
 
 // ---------------------------------------------------------------
+// 관리자: 누락된 후보 직접 추가
+//   "내가 낸 이름이 없어요" 같은 제보를 받았을 때 씁니다.
+//   출처 구분을 위해 제출자 기록에 '관리자/직접 추가'로 남깁니다.
+// ---------------------------------------------------------------
+export async function addSubmission({ groupKey, name }) {
+  const { data, error } = await supabase
+    .from('submissions')
+    .insert({ group_key: groupKey, name: tidy(name), status: 'ok' })
+    .select('id')
+  if (error) throw error
+
+  const { error: authorError } = await supabase.from('submission_authors').insert({
+    submission_id: data[0].id,
+    person_name: '관리자',
+    department: '직접 추가',
+  })
+  if (authorError) console.error('제출자 기록 실패(추가는 완료됨):', authorError)
+}
+
+// ---------------------------------------------------------------
 // 관리자: 후보 상태 바꾸기 (보류 승인 / 삭제 / 되살리기)
 // ---------------------------------------------------------------
 export async function setSubmissionStatus(id, status) {

@@ -9,10 +9,11 @@
 // 브라우저에서 합니다. 사내 이벤트 수준에서는 충분하지만 완벽한 잠금은 아닙니다.
 // "누가 어떤 이름을 냈는지"는 Supabase 대시보드에서만 볼 수 있게 따로 막아뒀습니다.
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { GROUPS } from '../lib/config'
+import { GROUPS, NAME_MAX } from '../lib/config'
+import { tidy, normalize } from '../lib/text'
 import {
   fetchSettings, updatePhase, updateNotes,
-  fetchSubmissions, setSubmissionStatus, groupCounts,
+  fetchSubmissions, setSubmissionStatus, groupCounts, addSubmission,
   countParticipants, fetchParticipants, assignRoomsRandomly, fetchRooms,
 } from '../lib/db'
 
@@ -44,6 +45,10 @@ export default function AdminPage() {
   const notesDirtyRef = useRef(false)
   const [subsError, setSubsError] = useState('')
   const [actError, setActError] = useState('')
+
+  // 누락 후보 직접 추가
+  const [addName, setAddName] = useState('')
+  const [addGroup, setAddGroup] = useState(GROUPS[0].key)
 
   // 되돌리기 어려운 버튼은 팝업 대신 "두 번 누르기"로 확인받습니다.
   // (팝업은 휴대폰에서 투박하고, 잘못 누르면 되돌릴 수 없어서)
@@ -128,6 +133,23 @@ export default function AdminPage() {
     } else {
       setPwError('비밀번호가 맞지 않습니다.')
     }
+  }
+
+  // "제출했는데 이름이 없어요" 제보를 받았을 때 관리자가 직접 추가합니다.
+  // 지워진 것까지 포함해 같은 이름이 이미 있으면 막고 어디 있는지 알려줍니다.
+  async function addCandidate() {
+    const name = tidy(addName)
+    if (!name) return
+    const dup = subs.find(
+      (s) => s.group_key === addGroup && normalize(s.name) === normalize(name),
+    )
+    if (dup) {
+      const where = dup.status === 'ok' ? '후보 목록' : dup.status === 'pending' ? '보류함' : '삭제 목록'
+      setActError(`"${dup.name}" — 이미 ${where}에 같은 이름이 있어요. (삭제된 거라면 목록에서 "공개"로 되살리세요)`)
+      return
+    }
+    await act(() => addSubmission({ groupKey: addGroup, name }), 'add')
+    setAddName('')
   }
 
   async function act(fn, label) {
@@ -271,6 +293,43 @@ export default function AdminPage() {
 
       {/* 이름 관리 */}
       <section className="rounded-2xl bg-white p-4 shadow-sm">
+        {/* 누락 후보 직접 추가 — "제출했는데 없어요" 제보 대응용 */}
+        <div className="mb-3 rounded-xl bg-indigo-50/60 p-3">
+          <p className="mb-2 text-[11px] font-bold text-gray-600">
+            ➕ 후보 직접 추가
+            <span className="ml-1 font-medium text-gray-400">누락 제보를 받았을 때</span>
+          </p>
+          <div className="mb-2 flex gap-1.5">
+            {GROUPS.map((g) => (
+              <button
+                key={g.key} type="button" onClick={() => setAddGroup(g.key)}
+                className={
+                  'flex-1 rounded-lg py-1.5 text-[11px] font-bold transition ' +
+                  (addGroup === g.key ? 'bg-indigo-500 text-white' : 'bg-white text-gray-500')
+                }
+              >
+                {g.title}
+              </button>
+            ))}
+          </div>
+          <div className="flex gap-2">
+            <input
+              type="text" value={addName} maxLength={NAME_MAX}
+              onChange={(e) => setAddName(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addCandidate() } }}
+              placeholder="추가할 이름"
+              className="min-w-0 flex-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+            />
+            <button
+              type="button" disabled={!tidy(addName) || busy === 'add'}
+              onClick={addCandidate}
+              className="rounded-lg bg-indigo-500 px-4 py-2 text-xs font-bold text-white disabled:bg-gray-300"
+            >
+              {busy === 'add' ? '추가 중...' : '추가'}
+            </button>
+          </div>
+        </div>
+
         <div className="mb-3 flex gap-1.5">
           {[
             { key: 'pending', label: `보류 ${pending.length}`, warn: pending.length > 0 },
