@@ -552,13 +552,22 @@ export default function AdminPage() {
       <section className="rounded-2xl bg-white p-4 shadow-sm">
         <div className="mb-2 flex items-center justify-between">
           <p className="text-xs font-bold text-gray-500">참여자 명단</p>
-          <button
-            type="button"
-            onClick={() => act(async () => setPeople(await fetchParticipants('submission')), 'people')}
-            className="rounded-lg bg-gray-100 px-2.5 py-1 text-[11px] font-bold text-gray-600"
-          >
-            공모 참여자 보기
-          </button>
+          <div className="flex gap-1.5">
+            <button
+              type="button"
+              onClick={() => act(async () => setPeople(await fetchParticipants('submission')), 'people')}
+              className="rounded-lg bg-gray-100 px-2.5 py-1 text-[11px] font-bold text-gray-600"
+            >
+              공모 참여자
+            </button>
+            <button
+              type="button"
+              onClick={() => act(async () => setPeople(await fetchParticipants('voting')), 'people')}
+              className="rounded-lg bg-indigo-100 px-2.5 py-1 text-[11px] font-bold text-indigo-600"
+            >
+              투표 참여자
+            </button>
+          </div>
         </div>
         <p className="mb-2 text-[10px] leading-relaxed text-gray-400">
           누가 <b>어떤 이름</b>을 냈는지는 보안을 위해 앱에서 볼 수 없습니다.
