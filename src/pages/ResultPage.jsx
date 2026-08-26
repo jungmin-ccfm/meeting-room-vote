@@ -113,9 +113,9 @@ export default function ResultPage() {
       })}
 
       <div className="rounded-2xl bg-white p-5 text-xs leading-relaxed text-gray-400 shadow-sm">
-        <p>· 아쉽게 선정되지 못한 이름들의 득표수는 공개하지 않아요. 이름을 보내주신 모든 분들, 감사합니다 🙏</p>
         <p>· 득표가 같은 경우에는 먼저 제출된 이름이 선정됐어요.</p>
         <p>· 어느 방에 어떤 이름이 붙을지는 같은 층 안에서 추첨으로 정했어요.</p>
+        <p>· 이름을 지어주시고 뽑아주신 모든 분들, 감사합니다 🙏</p>
       </div>
     </div>
   )
