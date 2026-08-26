@@ -97,6 +97,18 @@ export function stepKeyForPhase(phase) {
   return 'submission' // submission, review 는 첫 단계로 표시
 }
 
+// 본부 단위 참여율 집계 (관리자 화면 현황판용)
+// - size: 조직도 기준 인원수 (2026-08 확인, 유통사업팀은 담당자 확인값)
+// - keywords: 참여자의 부서 문자열에 이 중 하나라도 포함되면 해당 본부로 분류
+export const DIVISIONS = [
+  { label: '마케팅 1본부', size: 42, keywords: ['마케팅1본부'] },
+  { label: '마케팅 2본부', size: 38, keywords: ['마케팅2본부'] },
+  { label: '브랜드 1본부', size: 44, keywords: ['브랜드1본부'] },
+  { label: '브랜드 2본부', size: 4, keywords: ['브랜드2본부'] },
+  { label: '유통사업팀', size: 12, keywords: ['유통'] },
+  { label: 'CCFM', size: 28, keywords: ['AX', '경영관리', '교육', '브랜드커뮤니케이션', '브커'] },
+]
+
 // 이름 길이 제한
 export const NAME_MAX = 12
 

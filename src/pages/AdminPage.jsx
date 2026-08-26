@@ -8,8 +8,8 @@
 // 보안에 대해: 이 앱은 브라우저에서 직접 DB에 접속하는 구조라, 비밀번호 확인도
 // 브라우저에서 합니다. 사내 이벤트 수준에서는 충분하지만 완벽한 잠금은 아닙니다.
 // "누가 어떤 이름을 냈는지"는 Supabase 대시보드에서만 볼 수 있게 따로 막아뒀습니다.
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { GROUPS, NAME_MAX } from '../lib/config'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { GROUPS, NAME_MAX, DIVISIONS } from '../lib/config'
 import { tidy, normalize } from '../lib/text'
 import {
   fetchSettings, updatePhase, updateNotes,
@@ -50,6 +50,9 @@ export default function AdminPage() {
   const [addName, setAddName] = useState('')
   const [addGroup, setAddGroup] = useState(GROUPS[0].key)
 
+  // 본부별 참여율 (공모/투표 참여자 명단을 통째로 받아 집계)
+  const [allParts, setAllParts] = useState({ submission: [], voting: [] })
+
   // 되돌리기 어려운 버튼은 팝업 대신 "두 번 누르기"로 확인받습니다.
   // (팝업은 휴대폰에서 투박하고, 잘못 누르면 되돌릴 수 없어서)
   const [armed, setArmed] = useState(null)
@@ -72,12 +75,14 @@ export default function AdminPage() {
   // 하나가 실패해도 나머지는 보이게 합니다.
   // (예: DB에 아직 status 컬럼이 없으면 이름 목록만 비고 단계 전환은 됩니다)
   const reload = useCallback(async () => {
-    const [s, all, c1, c2, rm] = await Promise.allSettled([
+    const [s, all, c1, c2, rm, ps, pv] = await Promise.allSettled([
       fetchSettings(),
       fetchSubmissions({ includeHidden: true }),
       countParticipants('submission'),
       countParticipants('voting'),
       fetchRooms(),
+      fetchParticipants('submission'),
+      fetchParticipants('voting'),
     ])
 
     if (s.status === 'fulfilled') {
@@ -108,6 +113,10 @@ export default function AdminPage() {
       voting: c2.status === 'fulfilled' ? c2.value : null,
     })
     if (rm.status === 'fulfilled') setRooms(rm.value)
+    setAllParts({
+      submission: ps.status === 'fulfilled' ? ps.value : [],
+      voting: pv.status === 'fulfilled' ? pv.value : [],
+    })
   }, [])
 
   useEffect(() => {
@@ -162,6 +171,20 @@ export default function AdminPage() {
     }
     finally { setBusy('') }
   }
+
+  // 본부별 참여율 — 공모·마감 단계에선 공모 기준, 투표·결과 단계에선 투표 기준
+  const trackPhase =
+    settings?.phase === 'submission' || settings?.phase === 'review' ? 'submission' : 'voting'
+  const divStats = useMemo(() => {
+    const rows = allParts[trackPhase] ?? []
+    const inDivision = (p, d) => d.keywords.some((k) => (p.department || '').includes(k))
+    const stats = DIVISIONS.map((d) => {
+      const count = rows.filter((p) => inDivision(p, d)).length
+      return { ...d, count, pct: Math.min(100, Math.round((count / d.size) * 100)) }
+    }).sort((a, b) => b.pct - a.pct)
+    const etc = rows.filter((p) => !DIVISIONS.some((d) => inDivision(p, d)))
+    return { stats, etc }
+  }, [allParts, trackPhase])
 
   // ------------------------------------------------------------
   if (!authed) {
@@ -287,6 +310,44 @@ export default function AdminPage() {
           <p className="mt-2 rounded-xl bg-red-50 px-3 py-2.5 text-[11px] leading-relaxed text-red-600">
             ⚠ <b>후보가 방 개수보다 적은 그룹이 있어요.</b> 이대로 결과를 공개하면 이름 없는
             방이 생깁니다. 공모 마감을 미루고 참여를 독려하거나, 후보를 더 모아주세요.
+          </p>
+        )}
+      </section>
+
+      {/* 본부별 참여율 */}
+      <section className="rounded-2xl bg-white p-4 shadow-sm">
+        <p className="mb-3 text-xs font-bold text-gray-500">
+          본부별 참여율
+          <span className="ml-1 font-medium text-gray-400">
+            — {trackPhase === 'submission' ? '공모' : '투표'} 기준
+          </span>
+        </p>
+        <div className="space-y-2">
+          {divStats.stats.map((d, i) => (
+            <div key={d.label}>
+              <div className="mb-0.5 flex items-baseline justify-between text-[11px]">
+                <span className="font-semibold text-gray-600">
+                  {i === 0 && d.count > 0 && '👑 '}
+                  {d.label}
+                </span>
+                <span className="text-gray-500">
+                  <b className="text-gray-800">{d.pct}%</b>
+                  <span className="ml-1 text-gray-400">({d.count}/{d.size}명)</span>
+                </span>
+              </div>
+              <div className="h-1.5 overflow-hidden rounded-full bg-gray-100">
+                <div
+                  className="h-full rounded-full bg-indigo-500 transition-all"
+                  style={{ width: `${d.pct}%` }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+        {divStats.etc.length > 0 && (
+          <p className="mt-2 text-[10px] leading-relaxed text-gray-400">
+            분류 안 됨 {divStats.etc.length}명:{' '}
+            {divStats.etc.map((p) => `${p.person_name}(${p.department})`).join(', ')}
           </p>
         )}
       </section>
