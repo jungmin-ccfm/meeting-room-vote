@@ -113,9 +113,9 @@ export default function ResultPage() {
       })}
 
       <div className="rounded-2xl bg-white p-5 text-xs leading-relaxed text-gray-400 shadow-sm">
-        <p>· 득표가 같은 경우에는 먼저 제출된 이름이 선정됐어요.</p>
-        <p>· 어느 방에 어떤 이름이 붙을지는 같은 층 안에서 추첨으로 정했어요.</p>
-        <p>· 이름을 지어주시고 뽑아주신 모든 분들, 감사합니다 🙏</p>
+        <p>· 득표가 같은 경우에는 먼저 제출된 이름이 선정되는 것을 원칙으로 했습니다.</p>
+        <p>· 8층과 10층의 경우 당선된 이름들이 랜덤하게 회의실 명으로 배치될 예정입니다.</p>
+        <p>· 회의실 이름 공모부터 투표까지 참여해주신 직원분들께 감사드립니다 🙏</p>
       </div>
     </div>
   )
