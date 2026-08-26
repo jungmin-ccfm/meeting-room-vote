@@ -66,9 +66,9 @@ export default function App() {
           {settings.phase === 'submission' && <SubmissionPage settings={settings} />}
           {settings.phase === 'review' && (
             <Notice
-              emoji="🔒"
-              title="공모가 마감되었습니다"
-              body={'제출된 이름을 확인하고 있어요.\n곧 투표가 열립니다.'}
+              emoji="🗳️"
+              title="투표가 마감되었습니다"
+              body={'참여해 주셔서 감사합니다!\n결과를 집계하고 있어요. 곧 발표됩니다.'}
             />
           )}
           {settings.phase === 'voting' && <VotingPage />}
