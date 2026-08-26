@@ -573,16 +573,41 @@ export default function AdminPage() {
           누가 <b>어떤 이름</b>을 냈는지는 보안을 위해 앱에서 볼 수 없습니다.
           Supabase 대시보드 &gt; Table Editor &gt; submission_authors 에서 확인하세요.
         </p>
-        {people.length > 0 && (
-          <ul className="max-h-48 space-y-0.5 overflow-y-auto text-[11px] text-gray-600">
-            {people.map((p, i) => (
-              <li key={i} className="flex justify-between border-t border-gray-100 py-1">
-                <span className="font-semibold">{p.person_name}</span>
-                <span className="text-gray-400">{p.department}</span>
-              </li>
-            ))}
-          </ul>
-        )}
+        {people.length > 0 && (() => {
+          // 본부별로 묶어서 보여줍니다. 이름 뒤 괄호는 본부 안의 세부 팀.
+          const inDiv = (p, d) => d.keywords.some((k) => (p.department || '').includes(k))
+          const groups = DIVISIONS.map((d) => ({
+            label: d.label,
+            rows: people.filter((p) => inDiv(p, d)).map((p) => {
+              const team = d.keywords
+                .reduce((s, k) => s.replace(k, ''), p.department || '')
+                .trim()
+              return team ? `${p.person_name}(${team})` : p.person_name
+            }),
+          }))
+          groups.push({
+            label: '기타·직접 입력',
+            rows: people
+              .filter((p) => !DIVISIONS.some((d) => inDiv(p, d)))
+              .map((p) => `${p.person_name}(${p.department})`),
+          })
+          return (
+            <div className="max-h-64 space-y-2 overflow-y-auto">
+              {groups
+                .filter((g) => g.rows.length > 0)
+                .map((g) => (
+                  <div key={g.label}>
+                    <p className="border-b border-gray-100 pb-0.5 text-[11px] font-bold text-gray-600">
+                      {g.label} <span className="font-medium text-gray-400">{g.rows.length}명</span>
+                    </p>
+                    <p className="mt-1 text-[11px] leading-relaxed text-gray-600">
+                      {g.rows.join(' · ')}
+                    </p>
+                  </div>
+                ))}
+            </div>
+          )
+        })()}
       </section>
 
       <p className="pb-4 text-center text-[10px] text-gray-300">10초마다 자동으로 새로 읽습니다</p>
